@@ -23,8 +23,7 @@
             </tr>
             {% for orang in orangs %}
             <tr>
-                <td> </td>
-                <td> {{ orang[0] }} </td>
+                <td> {{ loop.index }}</td>
                 <td> {{ orang[1] }} </td>
                 <td> {{ orang[2] }} </td>
                 <td> {{ orang[3] }} </td>
