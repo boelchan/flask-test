@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+{% block title %} Tambah {% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        Tambah Data
+        <a href="{{ url_for('index') }}" class="btn btn-primary">Kembali ke index</a>
+    </div>
+    <div class="card-body">
+        <form action="{{ url_for('create') }}" method='post'>
+            <div class="mb-13 mt-3">
+                <label for="nama" class="form-label">Nama:</label>
+                <input type="input" class="form-control" placeholder="Nama" name="nama" required autofocus>
+            </div>
+            <div class="mb-3">
+                <label for="univ" class="form-label">Alamat:</label>
+                <textarea name="alamat" class="form-control" id="" cols="5" rows="3"></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="univ" class="form-label">Tanggal lahir</label>
+                <input type="date" class="form-control" name="tanggal_lahir" id="">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

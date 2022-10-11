@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+{% block title %} Hobi {% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        Data
+        {% if session.logged_in %}
+        <a href="{{ url_for('create') }}" class="btn btn-primary">Tambah</a>
+        {% endif %}
+
+    </div>
+    <div class="card-table">
+        <table class="table">
+            <tr>
+                <th></th>
+                <th>Nama</th>
+                <th>Alamat</th>
+                <th>Tanggal Lahir</th>
+                <th>Kota</th>
+                <th>Creation Date</th>
+                <th></th>
+            </tr>
+            {% for orang in orangs %}
+            <tr>
+                <td> </td>
+                <td> {{ orang[0] }} </td>
+                <td> {{ orang[1] }} </td>
+                <td> {{ orang[2] }} </td>
+                <td> {{ orang[3] }} </td>
+                <td> {{ orang[4] }} </td>
+                <td>
+                    {% if session.logged_in %}
+                    <a href="/edit/{{ orang[0] }}" class="btn btn-warning">Edit</a>
+                    <a href="/delete/{{ orang[0] }}" class="btn btn-danger" role="button">Delete</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+{% endblock %}
