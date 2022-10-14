@@ -24,14 +24,14 @@
             {% for orang in orangs %}
             <tr>
                 <td> {{ loop.index }}</td>
-                <td> {{ orang[1] }} </td>
-                <td> {{ orang[2] }} </td>
-                <td> {{ orang[3] }} </td>
-                <td> {{ orang[4] }} </td>
+                <td> {{ orang.nama }} </td>
+                <td> {{ orang.alamat }} </td>
+                <td> {{ orang.tanggal_lahir }} </td>
+                <td> {{ orang.kota }} </td>
                 <td>
                     {% if session.logged_in %}
-                    <a href="/edit/{{ orang[0] }}" class="btn btn-warning">Edit</a>
-                    <a href="/delete/{{ orang[0] }}" class="btn btn-danger" role="button">Delete</a>
+                    <a href="/edit/{{ orang.id }}" class="btn btn-warning">Edit</a>
+                    <a href="/delete/{{ orang.id }}" class="btn btn-danger" role="button">Delete</a>
                     {% endif %}
                 </td>
             </tr>

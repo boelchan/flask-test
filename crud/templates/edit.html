@@ -8,18 +8,18 @@
         <a href="{{ url_for('index') }}" class="btn btn-primary">Kembali ke index</a>
     </div>
     <div class="card-body">
-        <form action="/edit/{{ orang[0] }}" method='post'>
+        <form action="/edit/{{ orang.id }}" method='post'>
             <div class="mb-13 mt-3">
                 <label for="nama" class="form-label">Nama:</label>
-                <input type="input" class="form-control" placeholder="Nama" name="nama" value="{{ orang[1] }}" required autofocus>
+                <input type="input" class="form-control" placeholder="Nama" name="nama" value="{{ orang.nama }}" required autofocus>
             </div>
             <div class="mb-3">
                 <label for="univ" class="form-label">Alamat:</label>
-                <textarea name="alamat" class="form-control" id="" cols="5" rows="3">{{ orang[2] }}</textarea>
+                <textarea name="alamat" class="form-control" id="" cols="5" rows="3">{{ orang.alamat }}</textarea>
             </div>
             <div class="mb-3">
                 <label for="univ" class="form-label">Tanggal lahir</label>
-                <input type="date" class="form-control" name="tanggal_lahir" value="{{ orang[3] }}">
+                <input type="date" class="form-control" name="tanggal_lahir" value="{{ orang.tanggal_lahir }}">
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>

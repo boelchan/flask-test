@@ -1,23 +1,31 @@
 from flask import Flask, flash, render_template, url_for, redirect, request, session
-from flask_mysqldb import MySQL
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.secret_key = "asdfghjkl12345fdsa_fdsakld8rweodfds"
 
 # mysql config
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'root'
-app.config['MYSQL_DB'] = 'flask_test'
-mysql = MySQL(app)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:root@localhost/flask_test'
+db = SQLAlchemy(app)
+
+
+class Orang(db.Model):
+    __tablename__ = "orang"
+
+    id = db.Column(db.Integer, primary_key=True)
+    nama = db.Column(db.String(200))
+    alamat = db.Column(db.String(200))
+    tanggal_lahir = db.Column(db.Date())
+
+    def __init__(self, nama, alamat, tanggal_lahir):
+        self.nama = nama
+        self.alamat = alamat
+        self.tanggal_lahir = tanggal_lahir
 
 
 @app.route('/')
 def index():
-    cursor = mysql.connection.cursor()
-    cursor.execute(''' SELECT * FROM orang ''')
-    orangs = cursor.fetchall()
-    cursor.close()
+    orangs = Orang.query.all()
 
     return render_template('index.html', orangs=orangs)
 
@@ -31,44 +39,27 @@ def create():
         alamat = request.form['alamat']
         tanggal_lahir = request.form['tanggal_lahir']
 
-        cursor = mysql.connection.cursor()
-        cursor.execute(
-            '''INSERT INTO orang(nama,alamat,tanggal_lahir) VALUES(%s,%s,%s)''', (nama, alamat, tanggal_lahir))
-        mysql.connection.commit()
+        data = Orang(nama, alamat, tanggal_lahir)
+        db.session.add(data)
+        db.session.commit()
+
         flash('Data added successfully', 'success')
-        cursor.close()
 
         return redirect(url_for('index'))
 
 
 @app.route('/edit/<int:id>', methods=['GET', 'POST'])
 def edit(id):
-    if request.method == 'GET':
-        cursor = mysql.connection.cursor()
-        cursor.execute(''' SELECT * FROM orang WHERE id=%s''', (id,))
-        orang = cursor.fetchone()
-        cursor.close()
+    orang = Orang.query.get(id)
 
+    if request.method == 'GET':
         return render_template('edit.html', orang=orang)
 
     if request.method == 'POST':
-        nama = request.form['nama']
-        alamat = request.form['alamat']
-        tanggal_lahir = request.form['tanggal_lahir']
-
-        cursor = mysql.connection.cursor()
-        cursor.execute(''' 
-        UPDATE orang 
-        SET 
-            nama = %s,
-            alamat = %s,
-            tanggal_lahir = %s
-        WHERE
-            id = %s;
-        ''', (nama, alamat, tanggal_lahir, id))
-
-        mysql.connection.commit()
-        cursor.close()
+        orang.nama = request.form['nama']
+        orang.alamat = request.form['alamat']
+        orang.tanggal_lahir = request.form['tanggal_lahir']
+        db.session.commit()
 
         flash('berhasil diupdate', 'success')
 
@@ -80,10 +71,9 @@ def edit(id):
 @app.route('/delete/<int:id>', methods=['GET'])
 def delete(id):
     if request.method == 'GET':
-        cursor = mysql.connection.cursor()
-        cursor.execute(''' DELETE FROM orang WHERE id=%s''', (id, ))
-        mysql.connection.commit()
-        cursor.close()
+        orang = Orang.query.get(id)
+        db.session.delete(orang)
+        db.session.commit()
 
         flash('dihapus', 'success')
 
