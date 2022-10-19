@@ -17,8 +17,9 @@
                 <th>Nama</th>
                 <th>Alamat</th>
                 <th>Tanggal Lahir</th>
-                <th>Kota</th>
-                <th>Creation Date</th>
+                <th>Nomer</th>
+                <th>Created At</th>
+                <th>Updated At</th>
                 <th></th>
             </tr>
             {% for orang in orangs %}
@@ -27,7 +28,15 @@
                 <td> {{ orang.nama }} </td>
                 <td> {{ orang.alamat }} </td>
                 <td> {{ orang.tanggal_lahir }} </td>
-                <td> {{ orang.kota }} </td>
+                <td>
+                    <ul>
+                        {% for kontak in orang.kontaks|sort(attribute="nomer", reverse=true) %}
+                        <li>{{ kontak.nomer }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+                <td> {{ orang.created_at }} </td>
+                <td> {{ orang.updated_at }} </td>
                 <td>
                     {% if session.logged_in %}
                     <a href="/edit/{{ orang.id }}" class="btn btn-warning">Edit</a>
