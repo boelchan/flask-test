@@ -1,52 +1,17 @@
-from flask import Flask, flash, render_template, url_for, redirect, request, session
-from flask_sqlalchemy import SQLAlchemy
+from flask import Blueprint, flash, render_template, url_for, redirect, request, session
+from apps.crud.models import *
 
-app = Flask(__name__)
-app.secret_key = "asdfghjkl12345fdsa_fdsakld8rweodfds"
-
-# mysql config
-app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://root:root@localhost/flask_test"
-db = SQLAlchemy(app)
+crud = Blueprint("crud", __name__, template_folder="templates")
 
 
-class Orang(db.Model):
-    __tablename__ = "orang"
-    id = db.Column(db.Integer, primary_key=True)
-    nama = db.Column(db.String(200))
-    alamat = db.Column(db.String(200))
-    tanggal_lahir = db.Column(db.Date())
-
-    kontaks = db.relationship("Kontak", cascade="all", backref="orang")
-
-
-class Provider(db.Model):
-    __tablename__ = "provider"
-    id = db.Column(db.Integer, primary_key=True)
-    nama = db.Column(db.String(50))
-
-
-class Kontak(db.Model):
-    __tablename__ = "kontak"
-    id = db.Column(db.Integer, primary_key=True)
-    orang_id = db.Column(db.Integer(), db.ForeignKey(Orang.id))
-    provider_id = db.Column(db.Integer(), db.ForeignKey(Provider.id))
-    nomer = db.Column(db.String(50))
-
-    provider = db.relationship("Provider", backref="kontak")
-
-    @property
-    def nomerHp(self):
-        return self.provider.nama + " " + self.nomer
-
-
-@app.route("/")
+@crud.route("/")
 def index():
     orangs = Orang.query.order_by(Orang.tanggal_lahir).all()
 
     return render_template("index.html", orangs=orangs)
 
 
-@app.route("/create", methods=["GET", "POST"])
+@crud.route("/create", methods=["GET", "POST"])
 def create():
     if request.method == "GET":
         return render_template("create.html")
@@ -64,7 +29,7 @@ def create():
         return redirect(url_for("index"))
 
 
-@app.route("/edit/<int:id>", methods=["GET", "POST"])
+@crud.route("/edit/<int:id>", methods=["GET", "POST"])
 def edit(id):
     orang = Orang.query.get(id)
 
@@ -84,7 +49,7 @@ def edit(id):
     return redirect(url_for("index"))
 
 
-@app.route("/delete/<int:id>", methods=["GET"])
+@crud.route("/delete/<int:id>", methods=["GET"])
 def delete(id):
     if request.method == "GET":
         orang = Orang.query.get(id)
@@ -98,7 +63,7 @@ def delete(id):
     return redirect(url_for("index"))
 
 
-@app.route("/login", methods=["GET", "POST"])
+@crud.route("/", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
         if (
@@ -113,13 +78,9 @@ def login():
     return render_template("login.html")
 
 
-@app.route("/logout")
+@crud.route("/logout")
 def logout():
     session.pop("logged_in", None)
     flash("logout berhasil", "info")
 
     return redirect(url_for("login"))
-
-
-if __name__ == "__main__":
-    app.run(debug=True)

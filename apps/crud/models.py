@@ -1,5 +1,4 @@
-from flask_sqlalchemy import SQLAlchemy
-from view import db
+from database.database import db
 
 
 class Orang(db.Model):
