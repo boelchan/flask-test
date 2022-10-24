@@ -31,7 +31,7 @@
                 <td>
                     <ul>
                         {% for kontak in orang.kontaks|sort(attribute="nomer", reverse=true) %}
-                        <li>{{ kontak.nomer }}</li>
+                        <li>{{ kontak.nomerHp }}</li>
                         {% endfor %}
                     </ul>
                 </td>

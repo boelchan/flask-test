@@ -1,7 +1,5 @@
-from pprint import pp, pprint
 from flask import Flask, flash, render_template, url_for, redirect, request, session
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import func
 
 app = Flask(__name__)
 app.secret_key = "asdfghjkl12345fdsa_fdsakld8rweodfds"
@@ -18,17 +16,27 @@ class Orang(db.Model):
     alamat = db.Column(db.String(200))
     tanggal_lahir = db.Column(db.Date())
 
-    kontaks = db.relationship("Kontak", cascade="all")
+    kontaks = db.relationship("Kontak", cascade="all", backref="orang")
+
+
+class Provider(db.Model):
+    __tablename__ = "provider"
+    id = db.Column(db.Integer, primary_key=True)
+    nama = db.Column(db.String(50))
 
 
 class Kontak(db.Model):
     __tablename__ = "kontak"
     id = db.Column(db.Integer, primary_key=True)
     orang_id = db.Column(db.Integer(), db.ForeignKey(Orang.id))
-    provider = db.Column(db.String(50))
+    provider_id = db.Column(db.Integer(), db.ForeignKey(Provider.id))
     nomer = db.Column(db.String(50))
 
-    orang = db.relationship("Orang")
+    provider = db.relationship("Provider", backref="kontak")
+
+    @property
+    def nomerHp(self):
+        return self.provider.nama + " " + self.nomer
 
 
 @app.route("/")
