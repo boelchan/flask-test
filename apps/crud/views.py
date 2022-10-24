@@ -26,7 +26,7 @@ def create():
 
         flash("Data added successfully", "success")
 
-        return redirect(url_for("index"))
+    return redirect(url_for("crud.index"))
 
 
 @crud.route("/edit/<int:id>", methods=["GET", "POST"])
@@ -44,9 +44,7 @@ def edit(id):
 
         flash("berhasil diupdate", "success")
 
-        return redirect(url_for("index"))
-
-    return redirect(url_for("index"))
+    return redirect(url_for("crud.index"))
 
 
 @crud.route("/delete/<int:id>", methods=["GET"])
@@ -58,29 +56,4 @@ def delete(id):
 
         flash("dihapus", "success")
 
-        return redirect(url_for("index"))
-
-    return redirect(url_for("index"))
-
-
-@crud.route("/", methods=["GET", "POST"])
-def login():
-    if request.method == "POST":
-        if (
-            request.form["email"] == "superadmin@app.com"
-            and request.form["password"] == "123"
-        ):
-            flash("login berhasil", "success")
-            session["logged_in"] = True
-
-            return redirect(url_for("index"))
-
-    return render_template("login.html")
-
-
-@crud.route("/logout")
-def logout():
-    session.pop("logged_in", None)
-    flash("logout berhasil", "info")
-
-    return redirect(url_for("login"))
+    return redirect(url_for("crud.index"))
