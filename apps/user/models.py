@@ -22,7 +22,7 @@ class User(Base):
     password = db.Column(db.String(250))
     last_login = db.Column(db.DateTime())
 
-    kontaks = db.relationship("Contact", cascade="all", backref="user")
+    contacts = db.relationship("Contact", cascade="all", backref="user")
 
     def __init__(self, password, email):
         self.email = email
@@ -37,11 +37,6 @@ class User(Base):
 
     def refresh_last_login(self):
         self.last_login = datetime.now()
-        self.save()
-
-    def save(self):
-        self.last_login = func.now()
-        self.save()
 
 
 class Provider(Base):
