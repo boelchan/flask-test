@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+{% block title %} User {% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        Data
+        {% if session.logged_in %}
+        <a href="{{ url_for('user.create') }}" class="btn btn-primary">Tambah</a>
+        {% endif %}
+
+    </div>
+    <div class="card-table">
+        <table class="table">
+            <tr>
+                <th></th>
+                <th>Email</th>
+                <th>Password</th>
+                <th>Nomer</th>
+                <th>Last Login</th>
+                <th>Created At</th>
+                <th>Updated At</th>
+                <th></th>
+            </tr>
+            {% for user in users %}
+            <tr>
+                <td> {{ loop.index }}</td>
+                <td> {{ user.email }} </td>
+                <td> {{ user.password }} </td>
+                <td>
+                    <ul>
+                        {% for contact in user.contacts|sort(attribute="nomer", reverse=true) %}
+                        <li>{{ contact.nomerHp }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+                <td> {{ user.last_login }} </td>
+                <td> {{ user.created_at }} </td>
+                <td> {{ user.updated_at }} </td>
+                <td>
+                    {% if session.logged_in %}
+                    <a href="/edit/{{ user.id }}" class="btn btn-warning">Edit</a>
+                    <a href="/delete/{{ user.id }}" class="btn btn-danger" role="button">Delete</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+{% endblock %}

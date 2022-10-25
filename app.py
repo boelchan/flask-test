@@ -1,6 +1,6 @@
 from flask import Flask
-from database import database
-from apps.crud.views import crud
+from database import connection
+from apps.user.views import user
 from apps.auth.views import auth
 
 
@@ -10,10 +10,10 @@ def create_app():
     app.config.from_object("config.DevelopmentConfig")
 
     # setup all our dependencies
-    database.init_app(app)
+    connection.init_app(app)
 
     # register blueprint
-    app.register_blueprint(crud)
+    app.register_blueprint(user)
     app.register_blueprint(auth)
 
     return app
