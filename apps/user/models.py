@@ -1,7 +1,7 @@
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from sqlalchemy import func
+from sqlalchemy import Column, func
 from database.connection import db
 
 
@@ -21,22 +21,17 @@ class User(Base):
     email = db.Column(db.String(200))
     password = db.Column(db.String(250))
     last_login = db.Column(db.DateTime())
-
     contacts = db.relationship("Contact", cascade="all", backref="user")
 
-    def __init__(self, password, email):
-        self.email = email
-        if password:
-            self.set_password(password)
-
-    def set_password(self, password):
-        self.password = generate_password_hash(password, method="pbkdf2:sha1")
+    def set_password(password):
+        return generate_password_hash(password, method="pbkdf2:sha1")
 
     def check_password(self, password):
         return check_password_hash(self.password, password)
 
     def refresh_last_login(self):
         self.last_login = datetime.now()
+        db.session.commit()
 
 
 class Provider(Base):

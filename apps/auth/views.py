@@ -10,7 +10,7 @@ def login():
     if request.method == "POST":
         user = User.query.filter_by(email=request.form["email"]).first()
         if user and user.check_password(request.form["password"]):
-            # user.refresh_last_login()
+            user.refresh_last_login()
             flash("login berhasil", "success")
             session["logged_in"] = True
 

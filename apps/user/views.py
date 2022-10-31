@@ -18,7 +18,7 @@ def create():
     else:
         data = User(
             email=request.form["email"],
-            password=request.form["password"],
+            password=User.set_password(request.form["password"]),
         )
         db.session.add(data)
         db.session.commit()
@@ -37,7 +37,7 @@ def edit(id):
 
     if request.method == "POST":
         user.email = request.form["email"]
-        user.password = request.form["password"]
+        user.password = User.set_password(request.form["password"])
         db.session.commit()
 
         flash("berhasil diupdate", "success")
