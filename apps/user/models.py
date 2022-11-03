@@ -1,16 +1,14 @@
 from datetime import datetime
-from werkzeug.security import generate_password_hash, check_password_hash
-
-from sqlalchemy import Column, func
 from database.connection import db
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
 class Base(db.Model):
     __abstract__ = True
 
-    created_at = db.Column(db.DateTime(timezone=True), default=func.now())
+    created_at = db.Column(db.DateTime(timezone=True), default=datetime.now())
     updated_at = db.Column(
-        db.DateTime(timezone=True), default=func.now(), onupdate=func.now()
+        db.DateTime(timezone=True), default=datetime.now(), onupdate=datetime.now()
     )
 
 

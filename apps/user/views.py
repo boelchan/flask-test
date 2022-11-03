@@ -1,4 +1,4 @@
-from flask import Blueprint, flash, render_template, url_for, redirect, request, session
+from flask import Blueprint, flash, render_template, url_for, redirect, request
 from apps.user.models import *
 
 user = Blueprint("user", __name__, template_folder="templates")
