@@ -8,72 +8,48 @@
         {% if session.logged_in %}
         <a href="{{ url_for('user.create') }}" class="btn btn-primary">Tambah</a>
         {% endif %}
-
     </div>
     <div class="card-table">
         <div class="table-responsive">
-        <table class="table table-responsive">
-            <tr>
-                <th></th>
-                <th>Email</th>
-                <th>Password</th>
-                <th>Nomer</th>
-                <th>Last Login</th>
-                <th>Created At</th>
-                <th>Updated At</th>
-                <th></th>
-            </tr>
-            {% for user in users %}
-            <tr>
-                <td> {{ loop.index + users.first - 1 }}</td>
-                <td> {{ user.email }} </td>
-                <td> {{ user.password }} </td>
-                <td>
-                    <ul>
-                        {% for contact in user.contacts|sort(attribute="nomer", reverse=true) %}
-                        <li>{{ contact.nomerHp }}</li>
-                        {% endfor %}
-                    </ul>
-                </td>
-                <td> {{ user.last_login }} </td>
-                <td> {{ user.created_at }} </td>
-                <td> {{ user.updated_at }} </td>
-                <td>
-                    {% if session.logged_in %}
-                    <a href="/edit/{{ user.id }}" class="btn btn-warning">Edit</a>
-                    <a href="/delete/{{ user.id }}" class="btn btn-danger" role="button">Delete</a>
-                    {% endif %}
-                </td>
-            </tr>
-            {% endfor %}
-        </table>
-    </div>
-
+            <table class="table table-responsive">
+                <tr>
+                    <th></th>
+                    <th>Email</th>
+                    <th>Password</th>
+                    <th>Nomer</th>
+                    <th>Last Login</th>
+                    <th>Created At</th>
+                    <th>Updated At</th>
+                    <th></th>
+                </tr>
+                {% for user in users %}
+                <tr>
+                    <td> {{ loop.index + users.first - 1 }}</td>
+                    <td> {{ user.email }} </td>
+                    <td> {{ user.password }} </td>
+                    <td>
+                        <ul>
+                            {% for contact in user.contacts|sort(attribute="nomer", reverse=true) %}
+                            <li>{{ contact.nomerHp }}</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                    <td> {{ user.last_login }} </td>
+                    <td> {{ user.created_at }} </td>
+                    <td> {{ user.updated_at }} </td>
+                    <td>
+                        {% if session.logged_in %}
+                        <a href="/edit/{{ user.id }}" class="btn btn-warning">Edit</a>
+                        <a href="/delete/{{ user.id }}" class="btn btn-danger" role="button">Delete</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
     </div>
     <div class="card-footer pb-0">
-        <div class="d-flex justify-content-between">
-            <div>
-                {{ users.first }} - {{ users.last }} of {{ users.total }}
-            </div>
-            <nav>
-                <ul class="pagination">
-                    {% for page in users.iter_pages() %}
-                        {% if page %}
-                            {% if users.page != page %}
-                                <li class="page-item"><a class="page-link" href="{{ url_for('user.index', page=page) }}"> {{ page }}</a></li>
-                            {% else %}
-                                <span class='page-item active' aria-current="page"><a class="page-link" href="{{ url_for('user.index', page=page) }}"> {{ page }}</a></span>
-                            {% endif %}
-                        {% else %}
-                            <li class="page-item"><a href="#" class="page-link">...</a></li>
-                        {% endif %}            
-                    {% endfor %}
-                </ul>
-            </nav>
-
-        </div>
-
-
+        {{ pagination_link(users, 'user.index') }}
     </div>
 </div>
 
