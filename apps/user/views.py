@@ -7,7 +7,7 @@ user = Blueprint("user", __name__, template_folder="templates")
 @user.route("/")
 def index():
     page = request.args.get("page", 1, type=int)
-    users = User.query.paginate(page=page, per_page=4)
+    users = User.query.paginate(page=page, per_page=5)
 
     return render_template("index.html", users=users)
 
