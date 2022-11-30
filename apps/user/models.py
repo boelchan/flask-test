@@ -3,22 +3,17 @@ from database.connection import db
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
-class Base(db.Model):
-    __abstract__ = True
-
-    created_at = db.Column(db.DateTime(timezone=True), default=datetime.now())
-    updated_at = db.Column(
-        db.DateTime(timezone=True), default=datetime.now(), onupdate=datetime.now()
-    )
-
-
-class User(Base):
+class User(db.Model):
     __tablename__ = "user"
 
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(200))
     password = db.Column(db.String(250))
     last_login = db.Column(db.DateTime())
+    created_at = db.Column(db.DateTime(), default=datetime.now())
+    updated_at = db.Column(
+        db.DateTime(), default=datetime.now(), onupdate=datetime.now()
+    )
     contacts = db.relationship("Contact", cascade="all", backref="user")
 
     def set_password(password):
@@ -32,18 +27,26 @@ class User(Base):
         db.session.commit()
 
 
-class Provider(Base):
+class Provider(db.Model):
     __tablename__ = "provider"
     id = db.Column(db.Integer, primary_key=True)
     nama = db.Column(db.String(50))
+    created_at = db.Column(db.DateTime(), default=datetime.now())
+    updated_at = db.Column(
+        db.DateTime(), default=datetime.now(), onupdate=datetime.now()
+    )
 
 
-class Contact(Base):
+class Contact(db.Model):
     __tablename__ = "contact"
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer(), db.ForeignKey(User.id))
     provider_id = db.Column(db.Integer(), db.ForeignKey(Provider.id))
     nomer = db.Column(db.String(50))
+    created_at = db.Column(db.DateTime(), default=datetime.now())
+    updated_at = db.Column(
+        db.DateTime(), default=datetime.now(), onupdate=datetime.now()
+    )
 
     provider = db.relationship("Provider", backref="contact")
 
