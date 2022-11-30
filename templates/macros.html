@@ -10,7 +10,7 @@
                         {% if pagination.page != page %}
                             <li class="page-item"><a class="page-link" href="{{ url_for(endpoint, page=page) }}"> {{ page }}</a></li>
                         {% else %}
-                            <span class='page-item active' aria-current="page"><a class="page-link" href="{{ url_for(endpoint, page=page) }}"> {{ page }}</a></span>
+                            <span class='page-item active' aria-current="page"><a class="page-link" href="#"> {{ page }}</a></span>
                         {% endif %}
                     {% else %}
                         <li class="page-item"><a href="#" class="page-link">...</a></li>
