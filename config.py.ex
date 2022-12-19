@@ -18,4 +18,4 @@ class DevelopmentConfig(Config):
     ENV = "development"
     DEVELOPMENT = True
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = "mysql://root:root@localhost/flask_test"
+    SQLALCHEMY_DATABASE_URI = "mysql://root:@localhost/flask_test"
